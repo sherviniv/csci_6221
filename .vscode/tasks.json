@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Debug build goes to a separate file so the release exe used by the
+      // dashboard (bin/crystal-proxy.exe) is left alone. Writes a .pdb beside it.
+      "label": "crystal: build proxy (debug)",
+      "type": "shell",
+      "command": "crystal",
+      "args": [
+        "build",
+        "--debug",
+        "--error-trace",
+        "src/main.cr",
+        "-o",
+        "bin/crystal-proxy-debug"
+      ],
+      "options": { "cwd": "${workspaceFolder}/crystal-proxy" },
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+name: crystal-proxy
+version: 0.1.0
+crystal: ">= 1.21.0"
+targets:
+  crystal-proxy:
+    main: src/main.cr

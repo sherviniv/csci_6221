@@ -1,0 +1,11 @@
+# Slow-backend test: plain least-connections, nothing else.
+listen: "0.0.0.0:8083"
+metrics_listen: "0.0.0.0:9092"
+access_log: false
+pools:
+  app:
+    backends: ["http://fast:80", "http://slow:80"]
+    health_path: "/health"
+    max_idle_connections: 256
+routes:
+  - {host: "*", path_prefix: "/", pool: app}

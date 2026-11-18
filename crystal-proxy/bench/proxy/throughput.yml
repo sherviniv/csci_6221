@@ -1,0 +1,10 @@
+listen: "0.0.0.0:8082"
+metrics_listen: "0.0.0.0:9091"
+access_log: false
+pools:
+  app:
+    backends: ["http://backend1:80", "http://backend2:80"]
+    health_path: "/health"
+    max_idle_connections: 256
+routes:
+  - {host: "*", path_prefix: "/", pool: app}

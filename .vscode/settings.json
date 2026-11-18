@@ -1,0 +1,34 @@
+{
+  // VS Code only lets you click a breakpoint in a language that a debugger extension claims.
+  // None claims Crystal (.cr), so allow breakpoints in every file.
+  "debug.allowBreakpointsEverywhere": true,
+
+  // ---- Crystal Language extension (crystal-lang-tools.crystal-lang) ----
+  // Hover, go-to-definition and problems all work by running `crystal tool ...` on a main file.
+  // The extension looks for shard.yml / src/ in the workspace root, but this project lives in the
+  // crystal-proxy/ subfolder, so tell it where the entry point is. (${workspaceRoot} is expanded
+  // by the extension, not by VS Code.)
+  "crystal-lang.main": "${workspaceRoot}/crystal-proxy/src/main.cr",
+
+  // The extension's "dependencies" lookup always throws on Windows (it feeds a C:\ path to Uri.parse)
+  // and, because of how it is written, the shared lock is never released: hover then shows
+  // "Crystal: running context tool..." forever. Never use it.
+  "crystal-lang.dependencies": false,
+
+  // On Windows the extension mangles file paths (drops the drive, doubles every backslash), so the
+  // compiler cannot match the cursor to a file and hover shows nothing. This shim fixes the paths and
+  // calls the real crystal. It must be an ABSOLUTE path; if you move the repository, update it
+  // (if the file is not found the extension falls back to plain `crystal` and hover stops working).
+  "crystal-lang.compiler": "D:\\source\\repos\\6221\\.vscode\\crystal-tools.cmd",
+
+  // Both default to true; stated here so they are not switched off by a user-level setting.
+  "crystal-lang.hover": true,
+  "crystal-lang.definitions": true,
+
+  "[crystal]": {
+    // Crystal style (and `crystal tool format`) is 2 spaces.
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  }
+}

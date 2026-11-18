@@ -1,0 +1,25 @@
+listen: "0.0.0.0:8080"
+metrics_listen: "127.0.0.1:9090"   # admin port: /metrics, /api/state, POST /admin/reload
+
+pools:
+  api:
+    backends: ["http://127.0.0.1:9001", "http://127.0.0.1:9002"]
+    health_path: "/health"
+    health_interval_ms: 2000
+    unhealthy_after: 3
+    healthy_after: 2
+    connect_timeout_ms: 1000
+    read_timeout_ms: 10000
+    max_idle_connections: 64
+    idle_timeout_ms: 30000
+  web:
+    backends: ["http://127.0.0.1:9003"]
+    health_path: "/health"
+
+routes:
+  - host: "*"
+    path_prefix: "/"
+    pool: api
+  - host: "*"
+    path_prefix: "/static"
+    pool: web

@@ -1,0 +1,30 @@
+{
+  // Settings for when the crystal-proxy/ folder itself is opened in VS Code.
+  // (If you open the repository root instead, .vscode/settings.json there is used.)
+  // VS Code only reads the .vscode folder of the folder that is open, never a parent's.
+
+  // Entry point for the Crystal Language extension's hover / definitions / problems.
+  // ${workspaceRoot} is expanded by the extension, not by VS Code.
+  "crystal-lang.main": "${workspaceRoot}/src/main.cr",
+
+  // The extension's "dependencies" lookup always throws on Windows (it feeds a C:\ path to Uri.parse)
+  // and, because of how it is written, the shared lock is never released: hover then shows
+  // "Crystal: running context tool..." forever. Never use it.
+  "crystal-lang.dependencies": false,
+
+  // Shim that repairs the file paths the extension builds on Windows (see the file for details).
+  // Must be an ABSOLUTE path; update it if you move the repository.
+  "crystal-lang.compiler": "D:\\source\\repos\\6221\\.vscode\\crystal-tools.cmd",
+
+  "crystal-lang.hover": true,
+  "crystal-lang.definitions": true,
+
+  // Debugging .cr files needs this (no debugger extension claims the Crystal language).
+  "debug.allowBreakpointsEverywhere": true,
+
+  "[crystal]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  }
+}

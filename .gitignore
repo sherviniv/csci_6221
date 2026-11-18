@@ -1,0 +1,8 @@
+crystal-proxy/bin/
+crystal-proxy/runtime/
+demo-backend/out/
+demo-backend/bin/
+demo-backend/obj/
+dashboard/node_modules/
+dashboard/.next/
+crystal-proxy/bench/results/

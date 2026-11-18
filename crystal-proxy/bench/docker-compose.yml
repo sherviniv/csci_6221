@@ -1,0 +1,42 @@
+# Linux benchmark rig, started by ./run.sh.
+# nginx and crystal-proxy each get exactly 1 CPU and one worker/process.
+services:
+  backend1: &nginx_backend
+    image: nginx:1.27-alpine
+    volumes: ["./backend.conf:/etc/nginx/nginx.conf:ro"]
+  backend2: *nginx_backend
+
+  fast:
+    build: { context: .., dockerfile: bench/Dockerfile }
+    entrypoint: ["bench-backend"]
+    environment: { DELAY_MS: "0" }
+  slow:
+    build: { context: .., dockerfile: bench/Dockerfile }
+    entrypoint: ["bench-backend"]
+    environment: { DELAY_MS: "500" }
+
+  nginx:
+    image: nginx:1.27-alpine
+    volumes: ["./nginx.conf:/etc/nginx/nginx.conf:ro"]
+    depends_on: [backend1, backend2, fast, slow]
+    cpus: 1
+
+  crystal-proxy:
+    build: { context: .., dockerfile: bench/Dockerfile }
+    entrypoint: ["/bin/sh", "-c"]
+    # One process per config; only one is under load at a time.
+    command:
+      - |
+        for f in throughput throughput-1024 slow-plain; do
+          crystal-proxy --config /etc/proxy/$$f.yml > /dev/null &
+        done
+        wait
+    volumes: ["./proxy:/etc/proxy:ro"]
+    depends_on: [backend1, backend2, fast, slow]
+    init: true # so SIGTERM reaches the child processes and restarts are quick
+    cpus: 1
+
+  load:
+    image: ghcr.io/hatoo/oha:latest
+    entrypoint: ["sleep", "infinity"]
+    depends_on: [nginx, crystal-proxy]

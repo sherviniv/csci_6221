@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Crystal on Windows (MSVC) emits a .pdb, so the C++ extension's Visual Studio
+      // debugger (cppvsdbg) can set breakpoints in .cr files and step through them.
+      "name": "Debug crystal-proxy",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/crystal-proxy/bin/crystal-proxy-debug.exe",
+      "args": ["--config", "config/proxy.yml"],
+      "cwd": "${workspaceFolder}/crystal-proxy",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "preLaunchTask": "crystal: build proxy (debug)"
+    }
+  ]
+}
